@@ -1,4 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
+
 <table id="todesply">
     <c:forEach items="${posts}" var="post">
         <tr>
@@ -36,20 +38,20 @@
                     <h4 class="modal-title" id="H2">Modal Form</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" class="form-horizontal">
+                    <sf:form commandName="post" id="savepost" action="${pageContext.request.contextPath}/savepost" method="POST" role="form" class="form-horizontal">
                         <div class="form-group">
                             <label class="control-label">Texts Input</label>
-                            <textarea class="form-control" rows="3"></textarea>
+                            <sf:textarea path="txt" class="form-control" rows="3"/>
                         </div>  
                         <div class="form-group">          
                             <label class="control-label">Tags Input   split with ,</label>
-                               <input  type="text" class="form-control" name="tags" value="">
+                               <sf:input  path="TxtTags" class="form-control" name="tags" value=""/>
                         </div>
                      
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Save Post</button>
+                            <input type="submit" id="btnsavepost" class="btn btn-danger" data-dismiss="modal" value="Save Post"/>
                         </div>
-                    </form>
+                    </sf:form>
                 </div>
 
             </div>
@@ -80,7 +82,20 @@
                 });
             e.preventDefault();
         });
-
+$("#btnsavepost").click(
+       
+                function (e){
+         $.ajax({
+             url: "savepost",
+             data: $("#savepost").serialize(),
+             type: 'POST',
+             success: function (data, textStatus, jqXHR) {
+                  
+                    }
+         });  
+            e.preventDefault();
+        }
+                );
         $(window).scroll(function (e) {
             if ($(document).height() - 200 <= $(window).scrollTop() + $(window).height())
                 if (c !== -1)

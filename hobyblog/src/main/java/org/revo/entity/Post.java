@@ -15,8 +15,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -46,9 +44,9 @@ public class Post implements Serializable {
 	private List<PostComment> postComments;
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<PostLike> postLikes;
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable
-	private List<Tags> tags;
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<PostTags> postTags;
+	
 	@Transient
 	private String TxtTags;
 
@@ -110,12 +108,12 @@ public class Post implements Serializable {
 		this.postLikes = postLikes;
 	}
 
-	public List<Tags> getTags() {
-		return tags;
+	public List<PostTags> getPostTags() {
+		return postTags;
 	}
 
-	public void setTags(List<Tags> tags) {
-		this.tags = tags;
+	public void setPostTags(List<PostTags> postTags) {
+		this.postTags = postTags;
 	}
 
 	public String getTxtTags() {

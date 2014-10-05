@@ -30,6 +30,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	}
 
 	
+        @Override
 	public void create(T entity) {
 		getSession().save(entity);
 
@@ -37,18 +38,21 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 
 	@SuppressWarnings("unchecked")
 	
+        @Override
 	public T GetByRestrictions(Criterion Criterion) {
 		Criteria criteria=getSession().createCriteria(typeClass);
 		criteria.add(Criterion);
-		return (T) criteria.list().get(0);
+		return (T) criteria.uniqueResult();
 	}
 
 	
+        @Override
 	public void update(T entity) {
 	 getSession().update(entity);
 		
 	}
 	
+        @Override
 	public long ByProjection(Projection Projection) {
 		Session session = getSession();
 		Criteria criteria = session.createCriteria(typeClass);

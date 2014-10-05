@@ -20,12 +20,13 @@ public class userDetailsService implements UserDetailsService {
 
 	@Transactional
 	
+        @Override
 	public UserDetails loadUserByUsername(String Email)
 			throws UsernameNotFoundException {
 		Person Person = PersonDao.GetByEmail(Email);
 		if (Person.getType() == -1)
 			throw new UsernameNotFoundException("user not found");
-		List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority("Role_USER"));
 		if (Person.getType() == 0)
 			authorities.add(new SimpleGrantedAuthority("Role_ADMIN"));

@@ -26,6 +26,7 @@ public class GenericPersonDaoImpl extends GenericDaoImpl<Person> implements
 	}
 
 	
+        @Override
 	public Person GetByEmail(String Email) {
 		Criteria criteria = getSession().createCriteria(typeClass);
 		@SuppressWarnings("unchecked")

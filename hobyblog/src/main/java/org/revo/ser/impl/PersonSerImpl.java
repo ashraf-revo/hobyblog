@@ -16,26 +16,31 @@ public class PersonSerImpl implements PersonSer {
 	private PersonDao dao;
 
 	
+        @Override
 	public void create(Person Person) {
 		dao.create(Person);
 	}
 
 	
+        @Override
 	public Person GetByEmail(String Email) {
 		return dao.GetByEmail(Email);
 	}
 
 	
+        @Override
 	public Person GetByRestrictions(Criterion Criterion) {
 		return dao.GetByRestrictions(Criterion);
 	}
 
 	
+        @Override
 	public void update(Person entity) {
 		dao.update(entity);
 	}
 
 	
+        @Override
 	public long ByProjection(Projection Projection) {
 		return dao.ByProjection(Projection);
 	}

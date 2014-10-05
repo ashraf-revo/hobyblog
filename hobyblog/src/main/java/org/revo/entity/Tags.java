@@ -7,11 +7,13 @@ package org.revo.entity;
 
 import java.io.Serializable;
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  * 
@@ -28,8 +30,16 @@ public class Tags implements Serializable {
 	@GeneratedValue
 	private int id;
 	private String name;
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
-	private List<Post> post;
+	@OneToMany(mappedBy = "tags", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<PostTags> postTags;
+	public Tags() {
+		super();
+	}
+
+	public Tags(String name) {
+		super();
+		this.name = name;
+	}
 
 	public int getId() {
 		return id;
@@ -47,12 +57,14 @@ public class Tags implements Serializable {
 		this.name = name;
 	}
 
-	public List<Post> getPost() {
-		return post;
+	public List<PostTags> getPostTags() {
+		return postTags;
 	}
 
-	public void setPost(List<Post> post) {
-		this.post = post;
+	public void setPostTags(List<PostTags> postTags) {
+		this.postTags = postTags;
 	}
+
+ 
 
 }
