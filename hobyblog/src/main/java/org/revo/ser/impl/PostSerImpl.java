@@ -5,6 +5,7 @@
  */
 package org.revo.ser.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
@@ -13,8 +14,10 @@ import org.hibernate.criterion.Restrictions;
 import org.revo.dao.PostDao;
 import org.revo.entity.Person;
 import org.revo.entity.Post;
+import org.revo.entity.PostTags;
 import org.revo.entity.Tags;
 import org.revo.ser.PostSer;
+import org.revo.ser.PostTagsSer;
 import org.revo.ser.TagsSer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,45 +32,49 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostSerImpl implements PostSer {
 
     @Autowired
-    private PostDao dao;
+    private PostDao postDao;
     @Autowired
     TagsSer tagsSer;
+    @Autowired
+    PostTagsSer postTagsSer;
 
     @Override
     public List<Post> posts(int first, int max) {
-        return dao.posts(first, max);
+        return postDao.posts(first, max);
     }
 
     @Override
     public void create(Post entity) {
-        dao.create(entity);
+        postDao.create(entity);
     }
 
     @Override
     public Post GetByRestrictions(Criterion Criterion) {
-        return dao.GetByRestrictions(Criterion);
+        return postDao.GetByRestrictions(Criterion);
     }
 
     @Override
     public void update(Post entity) {
-        dao.update(entity);
+        postDao.update(entity);
     }
 
     @Override
     public long ByProjection(Projection Projection) {
-        return dao.ByProjection(Projection);
+        return postDao.ByProjection(Projection);
     }
 
     @Override
     public void newpost(Post post, Person Person) {
-
+        Serializable id = postDao.newpost(post, Person);
         String[] split = post.getTxtTags().split(",");
-        for (String split1 : split) {
-            if (tagsSer.GetByRestrictions(Restrictions.eq("name", split1)) == null) {
-                tagsSer.create(new Tags(split1));
+        for (String tagname : split) {
+            if (tagsSer.GetByRestrictions(Restrictions.eq("name", tagname)) == null) {
+                tagsSer.create(new Tags(tagname));
             }
+            Tags TAG = tagsSer.GetByRestrictions(Restrictions.eq("name", tagname));
+            postTagsSer.create(new PostTags(postDao.Getentity(id), TAG));
         }
-        dao.newpost(post,Person);
- }
+
+    }
 
 }
