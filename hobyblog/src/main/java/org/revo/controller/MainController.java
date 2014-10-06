@@ -1,5 +1,6 @@
 package org.revo.controller;
 
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
@@ -8,10 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.revo.entity.Person;
 import org.revo.entity.Post;
-import org.revo.entity.Tags;
 import org.revo.ser.PersonSer;
 import org.revo.ser.PostSer;
 import org.revo.ser.TagsSer;
@@ -172,9 +171,25 @@ public class MainController {
 
     @ResponseBody
     @RequestMapping(value = "/savepost", method = RequestMethod.POST)
-    public String newpost(@ModelAttribute("post") Post post, Principal principal) {
+    public String newpost(@ModelAttribute("post") Post post, Principal principal, HttpServletRequest request) {
+        String path = request.getContextPath();
+        Person Person = PersonSer.GetByEmail(principal.getName());
+        Serializable id = postSer.newpost(post, Person);
 
-        postSer.newpost(post, PersonSer.GetByEmail(principal.getName()));
-        return "true";
+        return "   <div class='col-lg-4'>"
+                + "<div class='panel panel-success'>"
+                + "<div class='panel-heading'>"
+                + " <img class='media-object img-thumbnail user-img' alt='" + Person.getUsername() + "'  src='" + path + "/resources/img/pimage/" + Person.getPimage() + "' />"
+                + "  </div>"
+                + " <div class='panel-body'>"
+                + "<p>"
+                + "  " + post.getTxt() + " "
+                + " </p>"
+                + "  </div>"
+                + "  <div class='panel-footer'>"
+                + " <input class='btn btn-success btn-xs btn-round btn-line'  type='button' value='hibernate' />"
+                + " </div>"
+                + "  </div>"
+                + "  </div>";
     }
 }

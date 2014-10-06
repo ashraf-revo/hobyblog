@@ -64,7 +64,7 @@ public class PostSerImpl implements PostSer {
     }
 
     @Override
-    public void newpost(Post post, Person Person) {
+    public Serializable newpost(Post post, Person Person) {
         Serializable id = postDao.newpost(post, Person);
         String[] split = post.getTxtTags().split(",");
         for (String tagname : split) {
@@ -74,7 +74,7 @@ public class PostSerImpl implements PostSer {
             Tags TAG = tagsSer.GetByRestrictions(Restrictions.eq("name", tagname));
             postTagsSer.create(new PostTags(postDao.Getentity(id), TAG));
         }
-
+return id;
     }
 
 }
